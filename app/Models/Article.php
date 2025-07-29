@@ -10,7 +10,7 @@ class Article extends Model
     // colones autoriser en écriture
     use HasFactory; 
     protected $fillable =[
-        'tittle',
+        'title',
         'content',
         'publish',
     ];

@@ -1,61 +1,503 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# API Articles - Documentation
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Description
+API REST développée avec Laravel pour la gestion d'articles. Cette API permet de créer, lire, modifier et supprimer des articles.
 
-## About Laravel
+## Prérequis
+- PHP 8.2+
+- Composer
+- Laravel 12.0
+- SQLite (par défaut)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Installation
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. Cloner le projet
+```bash
+git clone <url-du-repo>
+cd articleApi
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+2. Installer les dépendances
+```bash
+composer install
+npm install
+```
 
-## Learning Laravel
+3. Configuration de l'environnement
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+4. Migration de la base de données
+```bash
+php artisan migrate
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+5. Lancer le serveur
+```bash
+php artisan serve
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+L'API sera accessible à l'adresse : `http://localhost:8000`
 
-## Laravel Sponsors
+## Structure de données
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Modèle Article
+```json
+{
+  "id": 1,
+  "title": "Titre de l'article",
+  "content": "Contenu de l'article...",
+  "publish": true,
+  "created_at": "2025-07-29T15:30:00.000000Z",
+  "updated_at": "2025-07-29T15:30:00.000000Z"
+}
+```
 
-### Premium Partners
+## Endpoints de l'API
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Base URL
+```
+http://localhost:8000/api
+```
 
-## Contributing
+### 1. Lister tous les articles
+**GET** `/article`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Réponse :**
+```json
+{
+  "success": true,
+  "article": [
+    {
+      "id": 1,
+      "title": "Premier article",
+      "content": "Contenu du premier article",
+      "publish": true,
+      "created_at": "2025-07-29T15:30:00.000000Z",
+      "updated_at": "2025-07-29T15:30:00.000000Z"
+    }
+  ]
+}
+```
 
-## Code of Conduct
+### 2. Afficher un article spécifique
+**GET** `/article/{id}`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**Réponse :**
+```json
+{
+  "success": true,
+  "article": {
+    "id": 1,
+    "title": "Premier article",
+    "content": "Contenu du premier article",
+    "publish": true,
+    "created_at": "2025-07-29T15:30:00.000000Z",
+    "updated_at": "2025-07-29T15:30:00.000000Z"
+  }
+}
+```
 
-## Security Vulnerabilities
+### 3. Créer un nouvel article
+**POST** `/article`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+**Corps de la requête :**
+```json
+{
+  "title": "Nouveau titre",
+  "content": "Contenu de l'article",
+  "published": true
+}
+```
 
-## License
+**Réponse :**
+```json
+{
+  "success": true,
+  "message": "Article créé avec succès",
+  "article": {
+    "id": 2,
+    "title": "Nouveau titre",
+    "content": "Contenu de l'article",
+    "publish": true,
+    "created_at": "2025-07-29T16:00:00.000000Z",
+    "updated_at": "2025-07-29T16:00:00.000000Z"
+  }
+}
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 4. Modifier un article
+**PUT** `/article/{id}`
+
+**Corps de la requête :**
+```json
+{
+  "title": "Titre modifié",
+  "content": "Contenu modifié",
+  "published": false
+}
+```
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "message": "Article modifier avec succès",
+  "article": {
+    "id": 1,
+    "title": "Titre modifié",
+    "content": "Contenu modifié",
+    "publish": false,
+    "created_at": "2025-07-29T15:30:00.000000Z",
+    "updated_at": "2025-07-29T16:15:00.000000Z"
+  }
+}
+```
+
+### 5. Supprimer un article
+**DELETE** `/article/{id}`
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "message": "Article supprimer"
+}
+```
+
+## Exemples d'utilisation en JavaScript
+
+### Configuration de base
+```javascript
+const API_BASE_URL = 'http://localhost:8000/api';
+
+// Configuration par défaut pour fetch
+const defaultHeaders = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+};
+```
+
+### 1. Récupérer tous les articles
+```javascript
+async function getAllArticles() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/article`, {
+      method: 'GET',
+      headers: defaultHeaders
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      console.log('Articles récupérés:', data.article);
+      return data.article;
+    } else {
+      throw new Error('Erreur lors de la récupération des articles');
+    }
+  } catch (error) {
+    console.error('Erreur:', error);
+  }
+}
+
+// Utilisation
+getAllArticles().then(articles => {
+  articles.forEach(article => {
+    console.log(`${article.title}: ${article.content}`);
+  });
+});
+```
+
+### 2. Récupérer un article spécifique
+```javascript
+async function getArticleById(id) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/article/${id}`, {
+      method: 'GET',
+      headers: defaultHeaders
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      console.log('Article trouvé:', data.article);
+      return data.article;
+    } else {
+      throw new Error('Article non trouvé');
+    }
+  } catch (error) {
+    console.error('Erreur:', error);
+  }
+}
+
+// Utilisation
+getArticleById(1).then(article => {
+  console.log(`Titre: ${article.title}`);
+  console.log(`Contenu: ${article.content}`);
+  console.log(`Publié: ${article.publish ? 'Oui' : 'Non'}`);
+});
+```
+
+### 3. Créer un nouvel article
+```javascript
+async function createArticle(articleData) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/article`, {
+      method: 'POST',
+      headers: defaultHeaders,
+      body: JSON.stringify(articleData)
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      console.log('Article créé:', data.article);
+      return data.article;
+    } else {
+      throw new Error('Erreur lors de la création de l\'article');
+    }
+  } catch (error) {
+    console.error('Erreur:', error);
+  }
+}
+
+// Utilisation
+const nouvelArticle = {
+  title: "Mon Premier Article via API",
+  content: "Ceci est le contenu de mon premier article créé via l'API JavaScript.",
+  published: true
+};
+
+createArticle(nouvelArticle).then(article => {
+  console.log(`Article créé avec l'ID: ${article.id}`);
+});
+```
+
+### 4. Modifier un article existant
+```javascript
+async function updateArticle(id, articleData) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/article/${id}`, {
+      method: 'PUT',
+      headers: defaultHeaders,
+      body: JSON.stringify(articleData)
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      console.log('Article modifié:', data.article);
+      return data.article;
+    } else {
+      throw new Error('Erreur lors de la modification de l\'article');
+    }
+  } catch (error) {
+    console.error('Erreur:', error);
+  }
+}
+
+// Utilisation
+const articleModifie = {
+  title: "Titre Modifié",
+  content: "Contenu mis à jour avec de nouvelles informations.",
+  published: false
+};
+
+updateArticle(1, articleModifie).then(article => {
+  console.log(`Article ${article.id} modifié avec succès`);
+});
+```
+
+### 5. Supprimer un article
+```javascript
+async function deleteArticle(id) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/article/${id}`, {
+      method: 'DELETE',
+      headers: defaultHeaders
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      console.log('Article supprimé:', data.message);
+      return true;
+    } else {
+      throw new Error('Erreur lors de la suppression de l\'article');
+    }
+  } catch (error) {
+    console.error('Erreur:', error);
+    return false;
+  }
+}
+
+// Utilisation
+deleteArticle(1).then(success => {
+  if (success) {
+    console.log('Article supprimé avec succès');
+  }
+});
+```
+
+### Exemple complet avec gestion d'erreurs
+```javascript
+class ArticleAPI {
+  constructor(baseUrl = 'http://localhost:8000/api') {
+    this.baseUrl = baseUrl;
+    this.headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
+  }
+
+  async request(endpoint, options = {}) {
+    try {
+      const response = await fetch(`${this.baseUrl}${endpoint}`, {
+        headers: this.headers,
+        ...options
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('API Request Error:', error);
+      throw error;
+    }
+  }
+
+  async getAll() {
+    return this.request('/article');
+  }
+
+  async getById(id) {
+    return this.request(`/article/${id}`);
+  }
+
+  async create(articleData) {
+    return this.request('/article', {
+      method: 'POST',
+      body: JSON.stringify(articleData)
+    });
+  }
+
+  async update(id, articleData) {
+    return this.request(`/article/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(articleData)
+    });
+  }
+
+  async delete(id) {
+    return this.request(`/article/${id}`, {
+      method: 'DELETE'
+    });
+  }
+}
+
+// Utilisation de la classe
+const api = new ArticleAPI();
+
+// Exemple d'utilisation complète
+async function exempleComplet() {
+  try {
+    // Créer un article
+    const nouvelArticle = await api.create({
+      title: "Article via Classe API",
+      content: "Contenu de test",
+      published: true
+    });
+    console.log('Article créé:', nouvelArticle);
+
+    // Récupérer tous les articles
+    const articles = await api.getAll();
+    console.log('Tous les articles:', articles);
+
+    // Modifier l'article
+    const articleModifie = await api.update(nouvelArticle.article.id, {
+      title: "Article Modifié",
+      content: "Contenu modifié",
+      published: false
+    });
+    console.log('Article modifié:', articleModifie);
+
+    // Supprimer l'article
+    await api.delete(nouvelArticle.article.id);
+    console.log('Article supprimé');
+
+  } catch (error) {
+    console.error('Erreur dans l\'exemple:', error);
+  }
+}
+
+// Lancer l'exemple
+exempleComplet();
+```
+
+## Validation des données
+
+### Règles de validation
+- **title** : Obligatoire, chaîne de caractères, maximum 255 caractères
+- **content** : Obligatoire
+- **published** : Booléen (optionnel, défaut: false)
+
+### Exemple de gestion des erreurs de validation
+```javascript
+async function createArticleWithValidation(articleData) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/article`, {
+      method: 'POST',
+      headers: defaultHeaders,
+      body: JSON.stringify(articleData)
+    });
+    
+    const data = await response.json();
+    
+    if (response.status === 422) {
+      // Erreurs de validation
+      console.error('Erreurs de validation:', data.errors);
+      return { success: false, errors: data.errors };
+    }
+    
+    if (data.success) {
+      return { success: true, article: data.article };
+    }
+    
+  } catch (error) {
+    console.error('Erreur réseau:', error);
+    return { success: false, error: error.message };
+  }
+}
+```
+
+## Codes de statut HTTP
+
+- **200** : Succès (GET, PUT, DELETE)
+- **201** : Créé avec succès (POST)
+- **404** : Ressource non trouvée
+- **422** : Erreur de validation
+- **500** : Erreur serveur
+
+## Notes importantes
+
+⚠️ **Attention** : Il y a une incohérence dans le code entre le modèle qui utilise `publish` et la validation qui attend `published`. Assurez-vous d'utiliser `published` dans vos requêtes.
+
+## Tests
+
+Pour tester l'API, vous pouvez utiliser les exemples JavaScript ci-dessus ou des outils comme :
+- Postman
+- Insomnia  
+- cURL
+- Thunder Client (VS Code)
+
+## Contribution
+
+1. Fork le projet
+2. Créer une branche feature
+3. Commiter vos changements
+4. Pousser vers la branche
+5. Ouvrir une Pull Request

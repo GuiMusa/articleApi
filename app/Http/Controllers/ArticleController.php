@@ -13,6 +13,11 @@ class ArticleController extends Controller
     public function index()
     {
         //
+        $article = Article::all();
+         return response()->json([
+            'success' => true,
+            'article' => $article 
+        ]);
     }
 
     /**
@@ -20,7 +25,22 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Validation des donnée
+        $validateData = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required',
+            'published' => 'boolean'
+        ]);
+
+        //creation dun article en base 
+        $article = Article::create($validateData);
+
+        //confirmation de l'article au format JSON
+        return response()->json([
+            'success'=> true,
+            'message'=>'Article créé avec succès',
+            'article'=>$article
+        ]);
     }
 
     /**
@@ -31,6 +51,7 @@ class ArticleController extends Controller
         //
         return response()->json([
             'success' => true,
+            'article' => $article 
         ]);
     }
 
@@ -40,6 +61,21 @@ class ArticleController extends Controller
     public function update(Request $request, Article $article)
     {
         //
+         $validateData = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required',
+            'published' => 'boolean'
+        ]);
+
+        //update dun article en base 
+        $article->update($validateData);
+
+        //confirmation de l'article au format JSON
+        return response()->json([
+            'success'=> true,
+            'message'=>'Article modifier avec succès',
+            'article'=>$article
+        ]);
     }
 
     /**
@@ -48,5 +84,13 @@ class ArticleController extends Controller
     public function destroy(Article $article)
     {
         //
+         $article->delete();
+
+        //confirmation de l'article au format JSON
+        return response()->json([
+            'success'=> true,
+            'message'=>'Article supprimer',
+            
+        ]);
     }
 }
